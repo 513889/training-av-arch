@@ -194,50 +194,53 @@
     </div>
 
     <script>
-        // 核心縮放引擎 (自適應解析度)
-    function autoScale() {
-        const wrapper = document.getElementById('scale-wrapper');
-        const targetWidth = 1400; // 畫布寬度
-        const targetHeight = 980; // 畫布高度 (請改為您實際定義的 height)
-        
-        // 計算當前螢幕可用空間
-        const currentWidth = window.innerWidth;
-        const currentHeight = window.innerHeight;
-        
-        // 計算縮放比例 (移除 , 1 的限制，允許大於 1 的放大)
-        const scaleW = currentWidth / targetWidth;
-        const scaleH = currentHeight / targetHeight;
-        const scale = Math.min(scaleW, scaleH); 
-        
-        // 套用縮放與置中
-        wrapper.style.transform = `scale(${scale})`;
-        wrapper.style.transformOrigin = 'top center';
-        
-        // 修正全螢幕時的邊界與置中
-        wrapper.style.marginTop = "0px"; 
-    }
+        // 核心縮放引擎 (自動偵測實際內容高度)
+        function autoScale() {
+            const wrapper = document.getElementById('scale-wrapper');
+            const canvas = document.querySelector('.canvas');
+            const info = document.getElementById('info-text');
+            
+            // 自動計算總高度：畫布高度 + 資訊面板高度 + 間距
+            const totalContentWidth = 1400; // 設計寬度
+            const totalContentHeight = canvas.offsetHeight + info.offsetHeight + 60; // 自動測量高度 + 上下邊距
+            
+            // 獲取當前視窗的可視區域
+            const windowW = window.innerWidth - 40;
+            const windowH = window.innerHeight - 40;
+            
+            // 計算縮放比例
+            const scaleW = windowW / totalContentWidth;
+            const scaleH = windowH / totalContentHeight;
+            
+            // 取最小比例，確保「寬」與「高」都不會超出螢幕
+            const scale = Math.min(scaleW, scaleH, 1);
+            
+            // 套用縮放與置中
+            wrapper.style.transform = `scale(${scale})`;
+            wrapper.style.transformOrigin = 'top center';
+            
+            // 修正全螢幕時的版面位置
+            wrapper.style.marginTop = "0px";
+        }
 
-        // 1. 監聽視窗調整
+        // 監聽視窗大小改變
         window.addEventListener('resize', autoScale);
 
-        // 2. 關鍵修正：監聽「全螢幕狀態改變」，狀態一變就立刻重算
-        document.addEventListener("fullscreenchange", () => {
-            // 延遲 50 毫秒執行，給瀏覽器一點時間渲染完全螢幕佈局
-            setTimeout(autoScale, 50); 
-        });
+        // 監聽「全螢幕狀態改變」，狀態一變立刻重算 (解決時間差問題)
+        document.addEventListener("fullscreenchange", autoScale);
 
-        // 3. 一鍵全螢幕邏輯
+        // 一鍵全螢幕邏輯
         document.body.addEventListener('click', () => {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().catch(err => {
-                    console.log(`全螢幕錯誤: ${err.message}`);
+                    console.log(`無法全螢幕: ${err.message}`);
                 });
             } else {
                 document.exitFullscreen();
             }
         });
 
-        // 模式切換邏輯 (保留您原有的 setMode)
+        // 模式切換邏輯 (保留您原有的功能)
         function setMode(mode) {
             document.querySelectorAll('.path').forEach(el => el.classList.remove('active'));
             ['l-img-up', 'l-img-down', 'l-sub-up', 'l-sub-down'].forEach(id => {
@@ -268,11 +271,12 @@
                 setVol('fad-ab', '50%'); setMon('mon-ab', '1'); setVol('fad-c', '50%'); setMon('mon-c', '1'); setVol('fad-e', '50%'); setMon('mon-e', '1'); setVol('fad-f', '50%'); setMon('mon-f', '0.2');
             }
             document.getElementById('info-text').innerHTML = info;
-            autoScale();
+            // 模式切換後，強制重新計算高度
+            setTimeout(autoScale, 50);
         }
 
-        // 初始化載入
-        autoScale();
+        // 初始化
+        window.onload = autoScale;
         setMode('reset');
     </script>
 </body>

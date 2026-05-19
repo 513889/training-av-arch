@@ -195,25 +195,27 @@
 
     <script>
         // 核心縮放引擎 (自適應解析度)
-        function autoScale() {
-            const wrapper = document.getElementById('scale-wrapper');
-            const targetWidth = 1400; // 畫布基準寬度
-            const targetHeight = 1300; // 畫布基準高度
-            
-            // 計算當前螢幕可用空間
-            const currentWidth = window.innerWidth - 40;
-            const currentHeight = window.innerHeight - 40;
-            
-            // 計算縮放比例
-            const scaleW = currentWidth / targetWidth;
-            const scaleH = currentHeight / targetHeight;
-            const scale = Math.min(scaleW, scaleH, 1);
-            
-            // 套用縮放
-            wrapper.style.transform = `scale(${scale})`;
-            // 修正位置偏移 (讓縮放後維持置中)
-            wrapper.style.marginBottom = `-${wrapper.offsetHeight * (1 - scale)}px`;
-        }
+    function autoScale() {
+        const wrapper = document.getElementById('scale-wrapper');
+        const targetWidth = 1400; // 畫布寬度
+        const targetHeight = 980; // 畫布高度 (請改為您實際定義的 height)
+        
+        // 計算當前螢幕可用空間
+        const currentWidth = window.innerWidth;
+        const currentHeight = window.innerHeight;
+        
+        // 計算縮放比例 (移除 , 1 的限制，允許大於 1 的放大)
+        const scaleW = currentWidth / targetWidth;
+        const scaleH = currentHeight / targetHeight;
+        const scale = Math.min(scaleW, scaleH); 
+        
+        // 套用縮放與置中
+        wrapper.style.transform = `scale(${scale})`;
+        wrapper.style.transformOrigin = 'top center';
+        
+        // 修正全螢幕時的邊界與置中
+        wrapper.style.marginTop = "0px"; 
+    }
 
         // 1. 監聽視窗調整
         window.addEventListener('resize', autoScale);

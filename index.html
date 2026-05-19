@@ -197,33 +197,51 @@
         // 核心縮放引擎 (自適應解析度)
         function autoScale() {
             const wrapper = document.getElementById('scale-wrapper');
-            const targetWidth = 1400; 
-            const targetHeight = 1300; 
-            const scale = Math.min((window.innerWidth - 40) / targetWidth, (window.innerHeight - 40) / targetHeight, 1);
+            const targetWidth = 1400; // 畫布基準寬度
+            const targetHeight = 1300; // 畫布基準高度
+            
+            // 計算當前螢幕可用空間
+            const currentWidth = window.innerWidth - 40;
+            const currentHeight = window.innerHeight - 40;
+            
+            // 計算縮放比例
+            const scaleW = currentWidth / targetWidth;
+            const scaleH = currentHeight / targetHeight;
+            const scale = Math.min(scaleW, scaleH, 1);
+            
+            // 套用縮放
             wrapper.style.transform = `scale(${scale})`;
+            // 修正位置偏移 (讓縮放後維持置中)
             wrapper.style.marginBottom = `-${wrapper.offsetHeight * (1 - scale)}px`;
         }
 
+        // 1. 監聽視窗調整
         window.addEventListener('resize', autoScale);
-        autoScale();
 
-        // 一鍵全螢幕邏輯
+        // 2. 關鍵修正：監聽「全螢幕狀態改變」，狀態一變就立刻重算
+        document.addEventListener("fullscreenchange", () => {
+            // 延遲 50 毫秒執行，給瀏覽器一點時間渲染完全螢幕佈局
+            setTimeout(autoScale, 50); 
+        });
+
+        // 3. 一鍵全螢幕邏輯
         document.body.addEventListener('click', () => {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().catch(err => {
                     console.log(`全螢幕錯誤: ${err.message}`);
                 });
+            } else {
+                document.exitFullscreen();
             }
         });
 
+        // 模式切換邏輯 (保留您原有的 setMode)
         function setMode(mode) {
             document.querySelectorAll('.path').forEach(el => el.classList.remove('active'));
-            
             ['l-img-up', 'l-img-down', 'l-sub-up', 'l-sub-down'].forEach(id => {
                 let el = document.getElementById(id);
                 if (el) el.classList.add('active');
             });
-            
             const setVol = (id, val) => document.getElementById(id).style.bottom = val;
             const setMon = (id, val) => document.getElementById(id).style.opacity = val;
             
@@ -250,6 +268,9 @@
             document.getElementById('info-text').innerHTML = info;
             autoScale();
         }
+
+        // 初始化載入
+        autoScale();
         setMode('reset');
     </script>
 </body>

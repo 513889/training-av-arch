@@ -203,43 +203,40 @@
             const h1 = document.querySelector('h1');
             const subtitle = document.querySelector('.subtitle');
             
-            // 1. 【動態精準測量】：算出控制列 + 畫布 + 文字框的「實際總高度」
-            const targetWidth = 1400; // 原始設計寬度
-            const targetHeight = controls.offsetHeight + canvas.offsetHeight + info.offsetHeight + 60; // 60 是物件之間的間距
+            // 1. 動態精準測量
+            const targetWidth = 1400; 
+            const targetHeight = controls.offsetHeight + canvas.offsetHeight + info.offsetHeight + 60; 
             
-            // 2. 【計算 4K 螢幕的可用空間】：把上方大標題佔用的空間先扣掉
-            const topOffset = h1.offsetHeight + subtitle.offsetHeight + 60; // 包含 body 的 padding
+            // 2. 計算可用空間
+            const topOffset = h1.offsetHeight + subtitle.offsetHeight + 60; 
             const availableWidth = window.innerWidth - 40;
             const availableHeight = window.innerHeight - topOffset;
             
-            // 3. 【關鍵解鎖！！】：移除 ", 1" 限制，讓 4K 螢幕可以算出大於 1 的放大倍率！
+            // 3. 計算放大倍率 (無上限)
             const scaleW = availableWidth / targetWidth;
             const scaleH = availableHeight / targetHeight;
-            const scale = Math.min(scaleW, scaleH); // 絕對等比例縮放
+            const scale = Math.min(scaleW, scaleH); 
             
-            // 4. 執行極致放大與置中
+            // 4. 套用縮放
             wrapper.style.transform = `scale(${scale})`;
             wrapper.style.transformOrigin = 'top center';
             
-            // 5. 收斂底部邊界，防止出現右側捲軸
+            // 5. 修正底部邊界
             wrapper.style.marginBottom = `-${wrapper.offsetHeight * (1 - scale)}px`;
         }
 
-        // 監聽視窗調整大小
         window.addEventListener('resize', autoScale);
 
-        // 監聽「全螢幕狀態改變」，狀態一變立刻重算，消滅時間差！
         document.addEventListener("fullscreenchange", () => {
             setTimeout(autoScale, 50); 
         });
 
-        // 一鍵全螢幕邏輯
-        document.body.addEventListener('click', () => {
+        // 🌟 關鍵修正：單向全螢幕鎖定 (點擊只會進入，不會退出)
+        document.body.addEventListener('click', (e) => {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().catch(err => {});
-            } else {
-                document.exitFullscreen();
             }
+            // 移除了 else { document.exitFullscreen(); }，防止誤觸退出
         });
 
         // 模式切換邏輯
@@ -274,11 +271,9 @@
             }
             document.getElementById('info-text').innerHTML = info;
             
-            // 確保每次切換模式導致文字框變大變小時，都能重新完美對齊
             setTimeout(autoScale, 50);
         }
 
-        // 系統啟動初始化
         window.onload = () => {
             setMode('reset');
             autoScale();

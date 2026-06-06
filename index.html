@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>115年義工講習影音示意圖：系統標準操作程序 (SOP)</title>
+    <title>115年義工講習影音示意圖：系統標準操作程序 (SOP) - 音訊解耦完美版</title>
     <style>
         body { background-color: #0f172a; color: #f8fafc; font-family: 'Segoe UI', Tahoma, 'Microsoft JhengHei', sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; overflow: hidden; cursor: pointer; user-select: none; touch-action: manipulation; }
         h1 { color: #38bdf8; margin-bottom: 5px; letter-spacing: 2px; text-shadow: 0 0 12px rgba(56, 189, 248, 0.6); }
@@ -61,13 +61,10 @@
         #meet-sub { top: 220px; left: 1080px; }      
         #usb-sound { top: 340px; left: 80px; }        
         #cap-img { top: 340px; left: 380px; }        
-        #front-cam { top: 340px; left: 800px; border-color:#38bdf8; width: 60px;} 
-        #cap-sub { top: 340px; left: 1080px; }                      
-        
+        #cap-sub { top: 340px; left: 1080px; }                              
         #proj-vid { top: 500px; left: 170px; }                 
         #tv-live { top: 500px; left: 300px; }                 
-        #cam { top: 500px; left: 480px; border-color:#38bdf8; }         
-        
+        #cam { top: 500px; left: 480px; border-color:#38bdf8; }                 
         #switcher { top: 500px; left: 660px; background:#be123c; border-color:#e11d48; }         
         #matrix { top: 500px; left: 800px; }              
         #ppt-lap { top: 500px; left: 960px; }                 
@@ -75,12 +72,12 @@
         #mixer { top: 780px; left: 660px; }                
         #mic-a { top: 740px; left: 430px; width:60px; }
         #mic-b { top: 820px; left: 430px; width:60px; }
-        #pa-out { top: 780px; left: 920px; } 
-        
+        #pa-out { top: 780px; left: 920px; }         
         #mini-lap { top: 340px; left: 580px; }
 
-        #badge-c { top: 655px; left: 450px; }  
-        #badge-e { top: 655px; left: 740px; }  
+        /* ====== 像素級深度優化：標籤絕對淨空區 ====== */
+        #badge-c { top: 655px; left: 450px; }  /* 往左平移，完全避開 C 垂直線 (X=616) */
+        #badge-d { top: 440px; left: 480px; }  /* 往左上方移，懸浮於側攝影機上方，避開 D 垂直線 (X=560) */
         #badge-f { top: 920px; left: 340px; }  
 
         svg.bg-lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
@@ -98,10 +95,9 @@
 <body>
 
     <h1>🎛️ 115年義工講習影音示意圖 (標準操作手冊)</h1>
-    <div class="subtitle">視訊與音控系統標準佈線與操作規範</div>
+    <div class="subtitle">視訊與音控系統標準佈線與操作規範（音訊解耦完美版）</div>
 
-    <div id="scale-wrapper" style="transform-origin: top center; display: flex; flex-direction: column; align-items: center; width: 100%;">
-        
+    <div id="scale-wrapper" style="transform-origin: top center; display: flex; flex-direction: column; align-items: center; width: 100%;">        
         <div class="control-panel">
             <button class="btn-video" onclick="setMode('normal')">▶ 1. 主講者模式 </button>
             <button class="btn-cpr" onclick="setMode('cpr')">▶ 2. 多媒體模式 (播放影片)</button>
@@ -119,42 +115,49 @@
             </div>
 
             <div id="badge-c" class="hover-badge">C 路徑 (6.3mm MON 輸出 ➔ 側攝影機)</div>
-            <div id="badge-e" class="path-badge">E 路徑 (導播音源)</div>
+            <div id="badge-d" class="path-badge">D 路徑 (筆電音源)</div>
             <div id="badge-f" class="path-badge">F 路徑 (遠端發言)</div>
 
             <svg class="bg-lines">
-                <path id="l-front-mat" class="path line-hdmi" d="M 800 370 L 800 470" /> 
                 <path id="l-cam-sw" class="path line-hdmi" d="M 530 500 L 610 500" /> 
-                <path id="l-sw-mat" class="path line-hdmi" d="M 710 500 L 740 500" /> 
-                <path id="l-ppt-mat" class="path line-hdmi" d="M 910 500 L 860 500" /> 
+                <path id="l-sw-mat" class="path line-hdmi" d="M 710 500 L 750 500" /> 
+                <path id="l-ppt-mat" class="path line-hdmi" d="M 910 500 L 850 500" /> 
                 <path id="l-mat-cap1" class="path line-hdmi" d="M 770 470 L 770 420 L 380 420 L 380 355" /> 
                 <path id="l-mat-cap2" class="path line-hdmi" d="M 830 470 L 830 400 L 1080 400 L 1080 355" /> 
                 <path id="l-lap-mat2" class="path line-hdmi" d="M 1050 250 L 1050 290 L 850 290 L 850 470" /> 
-                <path id="l-mini-sw" class="path line-hdmi" d="M 580 380 L 580 450 L 640 450 L 640 470" /> 
+                
+                <path id="l-mini-sw" class="path line-hdmi" d="M 600 380 L 600 450 L 640 450 L 640 470" /> 
+                
                 <path id="l-mat-tv" class="path line-hdmi" d="M 780 530 L 780 570 L 300 570 L 300 530" /> 
                 <path id="l-mat-proj-vid" class="path line-hdmi" d="M 760 530 L 760 590 L 170 590 L 170 530" /> 
                 <path id="l-mat-proj-sub" class="path line-hdmi" d="M 840 530 L 840 580 L 1250 580 L 1250 530" /> 
+                
                 <path id="l-cap1-img" class="path line-usb-local" d="M 380 325 L 380 250" /> 
                 <path id="l-cap2-sub" class="path line-usb-local" d="M 1080 325 L 1080 250" /> 
                 <path id="l-meet-usb" class="path line-usb-local" d="M 325 220 L 80 220 L 80 310" /> 
+                
                 <path id="l-img-up" class="path line-cloud" d="M 360 190 L 360 110" /> 
                 <path id="l-sub-up" class="path line-cloud" d="M 1060 190 L 1060 110" /> 
                 <path id="l-img-down" class="path line-cloud" d="M 400 110 L 400 190" /> 
                 <path id="l-sub-down" class="path line-cloud" d="M 1100 110 L 1100 190" /> 
+                
                 <path id="l-mic-in" class="path line-ana" d="M 460 740 L 550 740" />
                 <path id="l-mic-in2" class="path line-ana" d="M 460 820 L 550 820" />
-                <path id="l-c-out" class="path line-ana" d="M 600 690 L 600 620 L 480 620 L 480 530" />
-                <path id="l-e-in" class="path line-ana" d="M 660 530 L 660 690" />
+                
+                <path id="l-c-out" class="path line-ana" d="M 616 690 L 616 580 L 480 580 L 480 540" />
+                
+                <path id="l-d-in" class="path line-ana" d="M 560 380 L 560 620 L 660 620 L 660 690" />
+                
                 <path id="l-f-in" class="path line-ana" d="M 80 370 L 80 920 L 704 920 L 704 870" /> 
                 <path id="l-main-out" class="path line-ana" style="stroke:#fff" d="M 770 780 L 865 780" />
             </svg>
 
-            <div id="front-cam" class="node source">📽️ 前攝影機<br><span>(直通矩陣)</span></div>
             <div id="cam" class="node source">🎥 側攝影機<br><span style="color:#f59e0b;">(接收 C 音訊)</span></div>
             <div id="ppt-lap" class="node source">💻 PPT筆電<br><span>(講義畫面源)</span></div>
-            <div id="mini-lap" class="node source">💻 小筆電<br><span>(輸入導播)</span></div>
+            
+            <div id="mini-lap" class="node source">💻 小筆電<br><span>(輸入導播)</span><br><span style="color:#f59e0b; font-size:11px;">(出 D 音訊)</span></div>
 
-            <div id="switcher" class="node">🎛️ 導播機<br><span style="color:#f59e0b;">(出 E 音訊)</span></div>
+            <div id="switcher" class="node">🎛️ 導播機<br><span style="color:#cbd5e1;">(純影像切換)</span></div>
             <div id="matrix" class="node matrix">🟦 H 矩陣<br><span>(影音分配中樞)</span></div>
 
             <div id="cap-img" class="node cap-card">擷取卡 1</div>
@@ -180,7 +183,7 @@
                 <div class="knob-row">
                     <div class="ch-col"><span>AB(麥)</span><div id="mon-ab" class="knob-mon"></div><div class="fader"><div id="fad-ab" class="fader-cap"></div></div></div>
                     <div class="ch-col"><span>C(嵌合)</span><div id="mon-c" class="knob-mon" style="background:#f59e0b"></div><div class="fader"><div id="fad-c" class="fader-cap"></div></div></div>
-                    <div class="ch-col"><span>E(影片)</span><div id="mon-e" class="knob-mon"></div><div class="fader"><div id="fad-e" class="fader-cap"></div></div></div>
+                    <div class="ch-col"><span>D(影片)</span><div id="mon-d" class="knob-mon"></div><div class="fader"><div id="fad-d" class="fader-cap"></div></div></div>
                     <div class="ch-col"><span>F(遠端)</span><div id="mon-f" class="knob-mon"></div><div class="fader"><div id="fad-f" class="fader-cap"></div></div></div>
                     <div class="ch-col"><span>MAIN</span><div class="fader"><div class="fader-cap" style="bottom:70%"></div></div></div>
                 </div>
@@ -194,7 +197,6 @@
     </div>
 
     <script>
-        // 核心縮放引擎 (終極 4K 放大不切邊版)
         function autoScale() {
             const wrapper = document.getElementById('scale-wrapper');
             const canvas = document.querySelector('.canvas');
@@ -203,74 +205,87 @@
             const h1 = document.querySelector('h1');
             const subtitle = document.querySelector('.subtitle');
             
-            // 1. 動態精準測量
             const targetWidth = 1400; 
             const targetHeight = controls.offsetHeight + canvas.offsetHeight + info.offsetHeight + 60; 
             
-            // 2. 計算可用空間
             const topOffset = h1.offsetHeight + subtitle.offsetHeight + 60; 
             const availableWidth = window.innerWidth - 40;
             const availableHeight = window.innerHeight - topOffset;
             
-            // 3. 計算放大倍率 (無上限)
             const scaleW = availableWidth / targetWidth;
             const scaleH = availableHeight / targetHeight;
             const scale = Math.min(scaleW, scaleH); 
             
-            // 4. 套用縮放
             wrapper.style.transform = `scale(${scale})`;
             wrapper.style.transformOrigin = 'top center';
-            
-            // 5. 修正底部邊界
             wrapper.style.marginBottom = `-${wrapper.offsetHeight * (1 - scale)}px`;
         }
 
         window.addEventListener('resize', autoScale);
-
         document.addEventListener("fullscreenchange", () => {
             setTimeout(autoScale, 50); 
         });
 
-        // 🌟 關鍵修正：單向全螢幕鎖定 (點擊只會進入，不會退出)
         document.body.addEventListener('click', (e) => {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().catch(err => {});
             }
-            // 移除了 else { document.exitFullscreen(); }，防止誤觸退出
         });
 
-        // 模式切換邏輯
         function setMode(mode) {
             document.querySelectorAll('.path').forEach(el => el.classList.remove('active'));
             ['l-img-up', 'l-img-down', 'l-sub-up', 'l-sub-down'].forEach(id => {
                 let el = document.getElementById(id);
                 if (el) el.classList.add('active');
             });
+
             const setVol = (id, val) => document.getElementById(id).style.bottom = val;
             const setMon = (id, val) => document.getElementById(id).style.opacity = val;
             
             let info = "";
+
             if (mode === 'normal') {
                 ['l-mic-in', 'l-mic-in2', 'l-c-out', 'l-main-out'].forEach(id => document.getElementById(id).classList.add('active'));
-                ['l-front-mat', 'l-cam-sw', 'l-ppt-mat', 'l-sw-mat', 'l-mat-cap1', 'l-mat-cap2', 'l-mat-tv', 'l-mat-proj-vid', 'l-mat-proj-sub', 'l-cap1-img', 'l-cap2-sub', 'l-mini-sw', 'l-lap-mat2'].forEach(id => document.getElementById(id).classList.add('active'));
-                setVol('fad-ab', '75%'); setMon('mon-ab', '1'); setVol('fad-c', '75%'); setMon('mon-c', '1'); setVol('fad-e', '10%'); setMon('mon-e', '0.2'); setVol('fad-f', '10%'); setMon('mon-f', '0.2');
+                ['l-cam-sw', 'l-ppt-mat', 'l-sw-mat', 'l-mat-cap1', 'l-mat-cap2', 'l-mat-tv', 'l-mat-proj-vid', 'l-mat-proj-sub', 'l-cap1-img', 'l-cap2-sub', 'l-mini-sw', 'l-lap-mat2'].forEach(id => document.getElementById(id).classList.add('active'));
+                
+                setVol('fad-ab', '75%'); setMon('mon-ab', '1'); 
+                setVol('fad-c', '75%'); setMon('mon-c', '1'); 
+                setVol('fad-d', '10%'); setMon('mon-d', '0.2'); 
+                setVol('fad-f', '10%'); setMon('mon-f', '0.2');
+                
                 info = "▶ <b>情境 1：主講者模式</b><br>請將 <b>AB(麥) 推桿</b>推起，轉開 <b>MON 旋鈕</b>。聲音經 [C 路徑] 嵌入攝影機同步上傳。";
+            
             } else if (mode === 'cpr') {
-                ['l-e-in', 'l-c-out', 'l-main-out'].forEach(id => document.getElementById(id).classList.add('active'));
-                ['l-front-mat', 'l-cam-sw', 'l-ppt-mat', 'l-sw-mat', 'l-mat-cap1', 'l-mat-cap2', 'l-mat-tv', 'l-mat-proj-vid', 'l-mat-proj-sub', 'l-cap1-img', 'l-cap2-sub', 'l-mini-sw', 'l-lap-mat2'].forEach(id => document.getElementById(id).classList.add('active'));
-                setVol('fad-ab', '10%'); setMon('mon-ab', '0.2'); setVol('fad-c', '75%'); setMon('mon-c', '1'); setVol('fad-e', '75%'); setMon('mon-e', '1'); setVol('fad-f', '10%'); setMon('mon-f', '0.2');
-                info = "▶ <b>情境 2：多媒體模式</b><br>影片經 [E 路徑] 進入。推起 <b>E 推桿</b>，<b>務必拉下 AB 麥克風推桿</b>避免迴授！";
+                ['l-d-in', 'l-c-out', 'l-main-out'].forEach(id => document.getElementById(id).classList.add('active'));
+                ['l-cam-sw', 'l-ppt-mat', 'l-sw-mat', 'l-mat-cap1', 'l-mat-cap2', 'l-mat-tv', 'l-mat-proj-vid', 'l-mat-proj-sub', 'l-cap1-img', 'l-cap2-sub', 'l-mini-sw', 'l-lap-mat2'].forEach(id => document.getElementById(id).classList.add('active'));
+                
+                setVol('fad-ab', '10%'); setMon('mon-ab', '0.2'); 
+                setVol('fad-c', '75%'); setMon('mon-c', '1'); 
+                setVol('fad-d', '75%'); setMon('mon-d', '1'); 
+                setVol('fad-f', '10%'); setMon('mon-f', '0.2');
+                
+                info = "▶ <b>情境 2：多媒體模式（音訊解耦版）</b><br>影片聲音經獨立 <b>[D 路徑]</b> 進入混音器。推起 <b>D 推桿</b>送給現場，確認 <b>D 軌 MON 開啟</b>以利上傳雲端，並<b>務必拉下 AB 麥克風推桿</b>避免空間迴授！";
+            
             } else if (mode === 'qa') {
                 ['l-mic-in', 'l-mic-in2', 'l-f-in', 'l-meet-usb', 'l-c-out', 'l-main-out'].forEach(id => document.getElementById(id).classList.add('active'));
-                ['l-front-mat', 'l-cam-sw', 'l-ppt-mat', 'l-sw-mat', 'l-mat-cap1', 'l-mat-cap2', 'l-mat-tv', 'l-mat-proj-vid', 'l-mat-proj-sub', 'l-cap1-img', 'l-cap2-sub', 'l-mini-sw', 'l-lap-mat2'].forEach(id => document.getElementById(id).classList.add('active'));
-                setVol('fad-ab', '75%'); setMon('mon-ab', '1'); setVol('fad-c', '75%'); setMon('mon-c', '1'); setVol('fad-e', '10%'); setMon('mon-e', '0.2'); setVol('fad-f', '75%'); setMon('mon-f', '0.2'); 
+                ['l-cam-sw', 'l-ppt-mat', 'l-sw-mat', 'l-mat-cap1', 'l-mat-cap2', 'l-mat-tv', 'l-mat-proj-vid', 'l-mat-proj-sub', 'l-cap1-img', 'l-cap2-sub', 'l-mini-sw', 'l-lap-mat2'].forEach(id => document.getElementById(id).classList.add('active'));
+                
+                setVol('fad-ab', '75%'); setMon('mon-ab', '1'); 
+                setVol('fad-c', '75%'); setMon('mon-c', '1'); 
+                setVol('fad-d', '10%'); setMon('mon-d', '0.2'); 
+                setVol('fad-f', '75%'); setMon('mon-f', '0.2'); 
+                
                 info = "▶ <b>情境 3：遠端發言模式</b><br>F(遠端) 經 USB 聲卡進入。推起 <b>F 推桿</b>，<b>F 軌 MON 旋鈕須維持歸零</b>，嚴禁回送！";
+            
             } else {
                 info = "系統佈線與操作守則已載入完成。請點擊上方模式按鈕。";
-                setVol('fad-ab', '50%'); setMon('mon-ab', '1'); setVol('fad-c', '50%'); setMon('mon-c', '1'); setVol('fad-e', '50%'); setMon('mon-e', '1'); setVol('fad-f', '50%'); setMon('mon-f', '0.2');
+                setVol('fad-ab', '50%'); setMon('mon-ab', '1'); 
+                setVol('fad-c', '50%'); setMon('mon-c', '1'); 
+                setVol('fad-d', '50%'); setMon('mon-d', '1'); 
+                setVol('fad-f', '50%'); setMon('mon-f', '0.2');
             }
-            document.getElementById('info-text').innerHTML = info;
             
+            document.getElementById('info-text').innerHTML = info;
             setTimeout(autoScale, 50);
         }
 
